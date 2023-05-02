@@ -8,7 +8,7 @@ class BIRD:
     def __init__(self):
         self.x = 100
         self.y = 250
-        self.image = pygame.image.load('./images/bird.png')
+        self.image = pygame.image.load('./images/bird.png').convert_alpha()
 
     def draw_bird(self):
         bird_rect = pygame.Rect(self.x, self.y, 100, 100)
@@ -39,6 +39,9 @@ pygame.init()
 screen = pygame.display.set_mode((1000, 800))
 clock = pygame.time.Clock()
 
+city_image = pygame.image.load('./images/city_background.jpg').convert_alpha()
+
+
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE, 20)
 
@@ -55,6 +58,7 @@ while True:
             main.bird.move_bird()
 
     screen.fill((255, 255, 255))
+    screen.blit(city_image, (0, 0))
     main.draw_elements()
     pygame.display.update()
-    clock.tick(144)
+    clock.tick(60)
