@@ -20,8 +20,8 @@ class BIRD:
     def move_bird(self):
         if self.jumping:
             if self.max_jump > 0:
-                self.max_jump -= 2
-                self.y -= 2
+                self.max_jump -= 3
+                self.y -= 3
             else:
                 self.jumping = False
                 self.max_jump = 120
@@ -44,7 +44,7 @@ class PIPE:
         pygame.draw.rect(screen, pygame.Color('green'), self.pipe_rect)
 
     def get_random_height(self):
-        return random.randint(100, 300)
+        return random.randint(100, 500)
 
     def move_pipe(self):
         self.x -= 1
@@ -71,6 +71,7 @@ class MAIN:
     def make_pipes(self):
         pipe_up = PIPE()
         pipe_down = PIPE()
+        pipe_down.height = 600 - pipe_up.height
         pipe_down.y = 800 - pipe_down.height
         self.pipes.append((pipe_up, pipe_down))
 
@@ -129,7 +130,7 @@ clock = pygame.time.Clock()
 city_image = pygame.image.load('./images/city_background.jpg').convert_alpha()
 
 PIPE_SPAWN = pygame.USEREVENT
-pygame.time.set_timer(PIPE_SPAWN, 1750)
+pygame.time.set_timer(PIPE_SPAWN, 3000)
 
 pipe = pygame.image.load('./images/pipe_small.png').convert_alpha()
 game_font = pygame.font.Font('./Font/PoetsenOne-Regular.ttf', 40)
