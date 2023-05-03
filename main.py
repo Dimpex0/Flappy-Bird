@@ -10,16 +10,23 @@ class BIRD:
         self.y = 250
         self.image = pygame.image.load('./images/bird.png').convert_alpha()
         self.bird_rect = None
+        self.jumping = False
+        self.max_jump = 120
 
     def draw_bird(self):
         self.bird_rect = pygame.Rect(self.x, self.y, 92, 70)
         screen.blit(self.image, self.bird_rect)
 
     def move_bird(self):
-        if self.y <= 0:
-            self.y = 0
-        else:
-            self.y -= 100
+        if self.jumping:
+            if self.max_jump > 0:
+                self.max_jump -= 2
+                self.y -= 2
+            else:
+                self.jumping = False
+                self.max_jump = 120
+                self.y += 2
+
 
     def get_rect(self):
         return self.bird_rect
@@ -68,6 +75,7 @@ class MAIN:
         self.pipes.append((pipe_up, pipe_down))
 
     def update(self):
+        self.bird.move_bird()
         if self.bird.y >= 700:
             self.bird.y = 700
         else:
@@ -137,7 +145,7 @@ while True:
             main.make_pipes()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP or event.key == pygame.K_SPACE:
-                main.bird.move_bird()
+                main.bird.jumping = True
 
     main.update()
     main.draw_elements()
