@@ -12,7 +12,7 @@ class BIRD:
         self.bird_rect = None
 
     def draw_bird(self):
-        self.bird_rect = pygame.Rect(self.x, self.y, 70, 70)
+        self.bird_rect = pygame.Rect(self.x, self.y, 92, 70)
         screen.blit(self.image, self.bird_rect)
 
     def move_bird(self):
@@ -54,6 +54,7 @@ class MAIN:
         self.score = 0
 
     def draw_elements(self):
+        screen.blit(city_image, (0, 0))
         self.bird.draw_bird()
         for pipes in self.pipes:
             pipes[0].draw_pipe()
@@ -92,8 +93,19 @@ class MAIN:
                 self.score += 1
 
     def draw_poins(self):
-        points_rect = pygame.Rect(900, 700, 60, 60)
-        pygame.draw.rect(screen, (167, 150, 67), points_rect)
+        score_text = str(self.score)
+        score_surface = game_font.render(score_text, True, (255, 255, 255))
+        score_x = 900
+        score_y = 700
+        score_rect = score_surface.get_rect(center=(score_x, score_y))
+        pipe_rect = pipe.get_rect(midright=(score_rect.left, score_rect.centery))
+        bg_rect = pygame.Rect(pipe_rect.left, pipe_rect.top, pipe_rect.width + score_rect.width + 20,
+                              pipe_rect.height)
+
+        pygame.draw.rect(screen, (128,128,128), bg_rect)
+        screen.blit(score_surface, score_rect)
+        screen.blit(pipe, pipe_rect)
+        pygame.draw.rect(screen, (105,105,105), bg_rect, 2)
 
     def end_game(self):
         pygame.quit()
@@ -109,7 +121,10 @@ clock = pygame.time.Clock()
 city_image = pygame.image.load('./images/city_background.jpg').convert_alpha()
 
 PIPE_SPAWN = pygame.USEREVENT
-pygame.time.set_timer(PIPE_SPAWN, 2000)
+pygame.time.set_timer(PIPE_SPAWN, 1750)
+
+pipe = pygame.image.load('./images/pipe_small.png').convert_alpha()
+game_font = pygame.font.Font('./Font/PoetsenOne-Regular.ttf', 40)
 
 main = MAIN()
 
@@ -120,13 +135,11 @@ while True:
             sys.exit()
         if event.type == PIPE_SPAWN:
             main.make_pipes()
-            main.update()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP or event.key == pygame.K_SPACE:
                 main.bird.move_bird()
 
-    screen.blit(city_image, (0, 0))
-    main.draw_elements()
     main.update()
+    main.draw_elements()
     pygame.display.update()
     clock.tick(144)
