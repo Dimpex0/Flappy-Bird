@@ -19,7 +19,7 @@ class BIRD:
         if self.y <= 0:
             self.y = 0
         else:
-            self.y -= 150
+            self.y -= 100
 
     def get_rect(self):
         return self.bird_rect
@@ -90,11 +90,10 @@ class MAIN:
             if pipe_up.x + 150 < self.bird.x:
                 self.pipes = self.pipes[1:]
                 self.score += 1
-        print(self.score)
 
     def draw_poins(self):
         points_rect = pygame.Rect(900, 700, 60, 60)
-        pygame.draw.rect(screen, pygame.Color('black'), points_rect)
+        pygame.draw.rect(screen, (167, 150, 67), points_rect)
 
     def end_game(self):
         pygame.quit()
@@ -123,7 +122,8 @@ while True:
             main.make_pipes()
             main.update()
         if event.type == pygame.KEYDOWN:
-            main.bird.move_bird()
+            if event.key == pygame.K_UP or event.key == pygame.K_SPACE:
+                main.bird.move_bird()
 
     screen.blit(city_image, (0, 0))
     main.draw_elements()
